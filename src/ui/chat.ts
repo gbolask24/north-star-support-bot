@@ -37,7 +37,12 @@ function timestamp(): string {
 const delay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, REDUCED_MOTION ? 0 : ms));
 
-export function initChat(): void {
+export interface ChatController {
+  open(): void;
+  ask(text: string): void;
+}
+
+export function initChat(): ChatController {
   const launcher = el<HTMLButtonElement>('chat-launcher');
   const panel = el<HTMLElement>('chat-panel');
   const header = el<HTMLElement>('chat-header');
@@ -52,6 +57,7 @@ export function initChat(): void {
   const convo = new Conversation();
   let started = false;
   let busy = false;
+  const pending: string[] = [];
 
   const starSvg = avatar.innerHTML;
 
@@ -59,7 +65,7 @@ export function initChat(): void {
     header.classList.toggle('is-agent', on);
     if (on) {
       avatar.textContent = 'R';
-      name.textContent = 'Riley — Live Agent';
+      name.textContent = 'Riley · Live Agent';
       status.innerHTML = '<i class="dot"></i> Live agent connected';
     } else {
       avatar.innerHTML = starSvg;
@@ -121,6 +127,11 @@ export function initChat(): void {
     }
     renderChips(chips);
     busy = false;
+    const queued = pending.shift();
+    if (queued) {
+      void send(queued);
+      return;
+    }
     input.focus({ preventScroll: true });
   }
 
@@ -155,13 +166,14 @@ export function initChat(): void {
 
   el<HTMLButtonElement>('chat-close').addEventListener('click', closePanel);
 
-  document.querySelectorAll<HTMLElement>('[data-open-chat]').forEach((node) => {
-    node.addEventListener('click', openPanel);
+  // Delegated so buttons inside re-rendered store views also work.
+  document.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('[data-open-chat]')) openPanel();
   });
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    if (busy) return; // keep the text — don't swallow input mid-response
+    if (busy) return; // keep the text, don't swallow input mid-response
     const value = input.value;
     input.value = '';
     void send(value);
@@ -173,4 +185,13 @@ export function initChat(): void {
       form.requestSubmit();
     }
   });
+
+  return {
+    open: openPanel,
+    ask(text: string): void {
+      openPanel();
+      if (busy) pending.push(text);
+      else void send(text);
+    },
+  };
 }

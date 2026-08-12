@@ -30,17 +30,17 @@ const ORDERS: Record<string, OrderInfo> = {
   '111': {
     id: '111',
     status: 'Shipped',
-    summary: "Great news — it's on its way and arriving tomorrow! 🎒",
+    summary: "Great news: it's on its way and arriving tomorrow! 🎒",
   },
   '222': {
     id: '222',
     status: 'Processing',
-    summary: "We're packing it up now — it ships in 24 hours.",
+    summary: "We're packing it up now. It ships in 24 hours.",
   },
   '333': {
     id: '333',
     status: 'Delivered',
-    summary: 'It was delivered — hope it’s already out on the trail with you!',
+    summary: 'It was delivered. We hope it’s already out on the trail with you!',
   },
 };
 
@@ -53,21 +53,21 @@ export const RETURN_POLICY = {
   windowDays: 30,
   rules: [
     'You have **30 days** from delivery to start a return (30-day returns).',
-    'Items must be **unused** — save the summit celebration until you’re sure!',
+    'Items must be **unused**, so save the summit celebration until you’re sure!',
     'Please keep the **original packaging**.',
   ],
 };
 
 export const SHIPPING = {
-  standard: '3–5 business days',
-  expedited: '1–2 business days',
+  standard: '3-5 business days',
+  expedited: '1-2 business days',
 };
 
 export const ACTIVITIES: Activity[] = [
   {
     id: 'hiking',
     label: '🥾 Hiking',
-    question: 'Nice — day hikes or multi-day treks?',
+    question: 'Nice! Day hikes or multi-day treks?',
     options: [
       {
         label: 'Day hikes',
@@ -84,7 +84,7 @@ export const ACTIVITIES: Activity[] = [
   {
     id: 'camping',
     label: '⛺ Camping',
-    question: 'Love it — car camping or backcountry?',
+    question: 'Love it! Car camping or backcountry?',
     options: [
       {
         label: 'Car camping',
@@ -101,7 +101,7 @@ export const ACTIVITIES: Activity[] = [
   {
     id: 'winter',
     label: '❄️ Winter adventures',
-    question: 'Brr — staying warm around town or hitting the slopes?',
+    question: 'Brr! Staying warm around town or hitting the slopes?',
     options: [
       {
         label: 'Around town',
@@ -118,7 +118,7 @@ export const ACTIVITIES: Activity[] = [
   {
     id: 'rain',
     label: '🌧️ Rain protection',
-    question: 'Good call — light drizzle or serious downpours?',
+    question: 'Good call! Light drizzle or serious downpours?',
     options: [
       {
         label: 'Light drizzle',

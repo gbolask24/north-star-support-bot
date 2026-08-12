@@ -1,5 +1,5 @@
 // Deterministic intent recognition: normalized text scored against weighted
-// keyword/phrase patterns. No external NLP — fully predictable and testable.
+// keyword/phrase patterns. No external NLP: fully predictable and testable.
 
 export type Intent =
   | 'track_order'
@@ -81,7 +81,7 @@ const PATTERNS: Record<Exclude<Intent, 'unknown'>, Pattern[]> = {
   ],
 };
 
-// Minimum score to claim an intent — a single weak keyword is not enough.
+// Minimum score to claim an intent, a single weak keyword is not enough.
 const THRESHOLD = 2;
 
 export function normalize(text: string): string {

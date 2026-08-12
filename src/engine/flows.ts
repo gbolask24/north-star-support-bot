@@ -138,7 +138,7 @@ export class Conversation {
       case 'thanks':
         this.resetToMenu();
         return {
-          messages: [bot("You're so welcome — that's what I'm here for! 🌲 " + ANYTHING_ELSE)],
+          messages: [bot("You're so welcome, that's what I'm here for! 🌲 " + ANYTHING_ELSE)],
           chips: MENU_CHIPS,
         };
       case 'goodbye':
@@ -160,7 +160,7 @@ export class Conversation {
     this.resetToMenu();
     const messages = fromAgent
       ? [
-          agent('Thanks for chatting — passing you back to our trusty bot. Take care out there! 👋'),
+          agent('Thanks for chatting! Passing you back to our trusty bot. Take care out there! 👋'),
           bot("I'm back! 🤖 " + ANYTHING_ELSE),
         ]
       : [bot('Back to base camp! ⛺ ' + ANYTHING_ELSE)];
@@ -191,13 +191,13 @@ export class Conversation {
   private awaitOrder(input: string, intent: Intent): BotResponse {
     const num = extractOrderNumber(input);
     if (num) return this.orderStatus(num);
-    // No number — maybe they changed their mind and asked for something else.
+    // No number: maybe they changed their mind and asked for something else.
     if (intent !== 'unknown' && intent !== 'track_order' && intent !== 'greeting') {
       return this.route(input, intent);
     }
     return {
       messages: [
-        bot("No worries — it's the number on your order confirmation email. What's your order number?"),
+        bot("No worries! It's the number on your order confirmation email. What's your order number?"),
       ],
       chips: [CHIPS.agent, CHIPS.menu],
     };
@@ -220,7 +220,7 @@ export class Conversation {
       this.state = 'ORDER_FOLLOWUP';
       return {
         messages: [
-          bot(`Order **#${order.id}** — **Delivered** ✅. ${order.summary}`),
+          bot(`Order **#${order.id}**: **Delivered** ✅. ${order.summary}`),
           bot('Is everything looking good with it, or do you need a hand with anything?'),
         ],
         chips: [CHIPS.yesHelp, CHIPS.noGood],
@@ -230,7 +230,7 @@ export class Conversation {
     const emoji = order.status === 'Shipped' ? '🚚' : '📦';
     return {
       messages: [
-        bot(`Order **#${order.id}** — **${order.status}** ${emoji}. ${order.summary}`),
+        bot(`Order **#${order.id}**: **${order.status}** ${emoji}. ${order.summary}`),
         bot(ANYTHING_ELSE),
       ],
       chips: MENU_CHIPS,
@@ -249,7 +249,7 @@ export class Conversation {
       this.resetToMenu();
       return {
         messages: [
-          bot("Sorry to hear something's off — let's get it sorted. I can walk you through a return or exchange, or connect you with a live agent."),
+          bot("Sorry to hear something's off. Let's get it sorted! I can walk you through a return or exchange, or connect you with a live agent."),
         ],
         chips: [CHIPS.returns, CHIPS.agent, CHIPS.menu],
       };
@@ -258,7 +258,7 @@ export class Conversation {
     this.resetToMenu();
     return {
       messages: [
-        bot("Got it — if anything comes up with that order, I'm right here. I can help with a return or connect you with a live agent."),
+        bot("Got it! If anything comes up with that order, I'm right here. I can help with a return or connect you with a live agent."),
       ],
       chips: [CHIPS.returns, CHIPS.agent, CHIPS.menu],
     };
@@ -270,10 +270,10 @@ export class Conversation {
     this.resetToMenu();
     return {
       messages: [
-        bot("Of course — here's how returns & exchanges work at North Star: 🧾"),
+        bot("Of course! Here's how returns & exchanges work at North Star: 🧾"),
         bot(RETURN_POLICY.rules.map((r) => `• ${r}`).join('\n')),
         bot(
-          `When you're ready, start your return here: ${STORE.returnsUrl}\n\nExchanges work the same way — just pick "exchange" on that page and we'll get the right size or color headed your way.`,
+          `When you're ready, start your return here: ${STORE.returnsUrl}\n\nExchanges work the same way. Just pick "exchange" on that page and we'll get the right size or color headed your way.`,
         ),
         bot(ANYTHING_ELSE),
       ],
@@ -303,7 +303,7 @@ export class Conversation {
     this.strikes = 0;
     return {
       messages: [
-        bot("Now we're talking — let's find you the right gear! 🧭 What kind of adventure are you gearing up for?"),
+        bot("Now we're talking! Let's find you the right gear. 🧭 What kind of adventure are you gearing up for?"),
       ],
       chips: [...ACTIVITIES.map((a) => a.label), CHIPS.menu],
     };
@@ -331,7 +331,7 @@ export class Conversation {
     if (intent !== 'unknown' && intent !== 'recommend') return this.route(input, intent);
     return {
       messages: [
-        bot("I want to point you to the right trail — pick the adventure that fits best: 🗺️"),
+        bot("I want to point you to the right trail. Pick the adventure that fits best: 🗺️"),
       ],
       chips: [...ACTIVITIES.map((a) => a.label), CHIPS.menu],
     };
@@ -349,7 +349,7 @@ export class Conversation {
       return {
         messages: [
           bot(
-            `Perfect — I'd recommend checking out our **${option.category}** 🎯: ${option.blurb}.`,
+            `Perfect! I'd recommend checking out our **${option.category}** 🎯: ${option.blurb}.`,
           ),
           bot(
             `Heads up: standard shipping takes ${SHIPPING.standard}, or ${SHIPPING.expedited} expedited if the trail can't wait. ${ANYTHING_ELSE}`,
@@ -372,9 +372,9 @@ export class Conversation {
     this.strikes = 0;
     return {
       messages: [
-        bot('You got it — connecting you with a live agent now… 🔄'),
+        bot('You got it! Connecting you with a live agent now… 🔄'),
         agent(
-          `Hi there, you're now chatting with **Riley** from ${STORE.name} support! 👋 I can see your conversation so far — what can I help you with?`,
+          `Hi there, you're now chatting with **Riley** from ${STORE.name} support! 👋 I can see your conversation so far. What can I help you with?`,
         ),
       ],
       chips: [CHIPS.menu, CHIPS.endChat],
@@ -387,7 +387,7 @@ export class Conversation {
     return {
       messages: [
         agent(
-          "Thanks for the details — I've made a note on your account and I'm on it. *(Simulated live agent for this demo.)* Anything else you'd like to add?",
+          "Thanks for the details! I've made a note on your account and I'm on it. *(Simulated live agent for this demo.)* Anything else you'd like to add?",
         ),
       ],
       chips: [CHIPS.menu, CHIPS.endChat],
@@ -401,7 +401,7 @@ export class Conversation {
     if (this.strikes >= 2) {
       return {
         messages: [
-          bot("I'm still not quite following — sorry about that! 🙇 Want me to connect you with a live agent? Or pick one of these and we'll get back on track:"),
+          bot("I'm still not quite following, sorry about that! 🙇 Want me to connect you with a live agent? Or pick one of these and we'll get back on track:"),
         ],
         chips: [CHIPS.agent, ...MENU_CHIPS.filter((c) => c !== CHIPS.agent)],
       };
