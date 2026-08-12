@@ -1,8 +1,8 @@
 # 🧪 Manual Test Script — North Star Support Bot
 
 This walkthrough mirrors the submission checklist. Total time: ~4 minutes.
-Open the app (live URL, `dist/index.html`, or `npm run dev`) and click the ⭐ chat
-bubble (bottom-right).
+Open the app (live URL, `North-Star-Support-Bot-DEMO.html`, or `npm run dev`) and
+click the ⭐ chat bubble (bottom-right).
 
 ## 1. Welcome & main menu
 

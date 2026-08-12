@@ -14,7 +14,7 @@ required to test it.**
 | Option | How |
 |---|---|
 | **1. Live demo** | Open the deployed URL (see submission notes) — the chat bubble is bottom-right |
-| **2. Single file** | Double-click `dist/index.html` — the entire app (fonts included) is one self-contained file, works offline |
+| **2. Single file** | Double-click **`North-Star-Support-Bot-DEMO.html`** (or `dist/index.html`, same file) — the entire app, fonts included, self-contained and works offline |
 | **3. Run locally** | `npm install && npm run dev` → http://localhost:5173 |
 
 No environment variables, no keys, no accounts. The bot is 100% deterministic —
