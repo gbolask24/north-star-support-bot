@@ -14,7 +14,7 @@ install steps required to test it.**
 
 | Option | How |
 |---|---|
-| **1. Live demo** | Open the deployed URL (see submission notes). The chat bubble is bottom-right. |
+| **1. Live demo** | **https://north-star-support-bot-roan.vercel.app** (the chat bubble is bottom-right) |
 | **2. Single file** | Double-click **`North-Star-Support-Bot-DEMO.html`** (or `dist/index.html`, same file). The entire app, fonts included, is one self-contained file and works offline. |
 | **3. Run locally** | `npm install && npm run dev` then visit http://localhost:5173 |
 
@@ -104,8 +104,8 @@ npm run build   # type-checks, builds a single self-contained HTML file,
                 # and refreshes North-Star-Support-Bot-DEMO.html
 ```
 
-Deploy anywhere static (Vercel: import the repo, framework preset "Vite", done. Or
-`npx vercel --prod`). No server, no environment config.
+Deployed on Vercel: https://north-star-support-bot-roan.vercel.app. Static output,
+no server, no environment config, so it deploys anywhere in one step.
 
 ## 📄 Provided business data (from the brief)
 

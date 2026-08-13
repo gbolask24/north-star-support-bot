@@ -2,3 +2,8 @@ node_modules/
 .DS_Store
 *.local
 .vercel
+
+# Local development files (kept out of the submission repo)
+docs/
+.claude/
+VIDEO_SCRIPT.md
