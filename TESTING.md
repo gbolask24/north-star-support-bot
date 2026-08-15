@@ -23,13 +23,17 @@ click the ⭐ chat bubble (bottom-right).
 
 ## 3. Returns & exchanges (use case ii)
 
-- [ ] Ask **"what's your return policy?"** (or click the chip)
-- [ ] Response includes: **30-day returns**, **unused items**, **original packaging**,
-      and a **returns link**
+- [ ] Click the **"↩️ Returns & exchanges"** chip: the bot asks whether you want a
+      **return** or an **exchange** before showing any policy (natural progression)
+- [ ] Pick **"Start a return"**: full return policy (30-day, unused, original
+      packaging), the returns link, numbered steps, and a refund explanation
+- [ ] Pick **"Make an exchange"** (or type "swap it"): full exchange policy with the
+      link, "pick exchange" steps, and size/color selection
+- [ ] Free text goes straight to the right one: **"what's your return policy?"** gives
+      returns directly; **"my jacket is too small"** gives exchanges directly
+- [ ] Ambiguous text (**"I want to return or exchange my boots"**) triggers the same
+      clarifying question
 - [ ] Bot returns to main menu options afterward
-- [ ] Ask **"what's your exchange policy?"** (or *"can I swap this for a bigger size?"*):
-      dedicated exchange answer with the same 30-day / unused / original packaging rules
-      and the link, with "pick exchange" instructions
 
 ## 4. Product recommendations (use case iii)
 
@@ -74,6 +78,6 @@ click the ⭐ chat bubble (bottom-right).
 ## 9. Automated suite
 
 ```bash
-npm test        # 102 tests, all engine logic
+npm test        # 110 tests, all engine logic
 npm run build   # strict type-check + production build
 ```

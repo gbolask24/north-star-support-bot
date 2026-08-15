@@ -15,9 +15,11 @@ import {
   detectIntent,
   extractOrderNumber,
   Intent,
+  intentScores,
   isAffirmative,
   isNegative,
   normalize,
+  THRESHOLD,
 } from './intents';
 
 export type Sender = 'bot' | 'agent';
@@ -43,6 +45,8 @@ export const CHIPS = {
   tryAgain: '🔁 Try another order number',
   yesHelp: 'Yes, I need a hand',
   noGood: 'No, all good!',
+  startReturn: '↩️ Start a return',
+  makeExchange: '🔁 Make an exchange',
 };
 
 const MENU_CHIPS = [
@@ -57,6 +61,7 @@ type State =
   | 'MENU'
   | 'AWAIT_ORDER'
   | 'ORDER_FOLLOWUP'
+  | 'RETURNS_CHOICE'
   | 'RECO_ACTIVITY'
   | 'RECO_OPTION'
   | 'LIVE_AGENT';
@@ -104,6 +109,8 @@ export class Conversation {
         return this.awaitOrder(input, intent);
       case 'ORDER_FOLLOWUP':
         return this.orderFollowup(input, intent);
+      case 'RETURNS_CHOICE':
+        return this.returnsChoiceAnswer(input, intent);
       case 'RECO_ACTIVITY':
         return this.recoActivity(input, intent);
       case 'RECO_OPTION':
@@ -118,6 +125,14 @@ export class Conversation {
   // ---- Routing from the main flow ----------------------------------------
 
   private route(input: string, intent: Intent): BotResponse {
+    // "Returns & exchanges" chip or ambiguous text mentioning both:
+    // ask which one before showing either policy (natural progression).
+    if (intent === 'returns' || intent === 'exchange') {
+      const scores = intentScores(input);
+      if ((scores.returns ?? 0) >= THRESHOLD && (scores.exchange ?? 0) >= THRESHOLD) {
+        return this.returnsChoice();
+      }
+    }
     switch (intent) {
       case 'track_order':
         return this.trackStart(input);
@@ -268,16 +283,41 @@ export class Conversation {
 
   // ---- Use case ii: returns & exchanges -----------------------------------
 
+  private returnsChoice(): BotResponse {
+    this.state = 'RETURNS_CHOICE';
+    this.strikes = 0;
+    return {
+      messages: [
+        bot('Happy to help with that! 🧾 Quick question so I point you the right way: would you like to **return** an item for a refund, or **exchange** it for a different size or color?'),
+      ],
+      chips: [CHIPS.startReturn, CHIPS.makeExchange, CHIPS.menu],
+    };
+  }
+
+  private returnsChoiceAnswer(input: string, intent: Intent): BotResponse {
+    if (intent === 'exchange') return this.exchangeInfo();
+    if (intent === 'returns') return this.returnsInfo();
+    if (intent !== 'unknown' && intent !== 'greeting') {
+      return this.route(input, intent);
+    }
+    return {
+      messages: [
+        bot('No rush! Just tell me which fits best: a **return** (send it back for a refund) or an **exchange** (swap it for a different size or color)?'),
+      ],
+      chips: [CHIPS.startReturn, CHIPS.makeExchange, CHIPS.menu],
+    };
+  }
+
   private returnsInfo(): BotResponse {
     this.resetToMenu();
     return {
       messages: [
-        bot("Of course! Here's how returns & exchanges work at North Star: 🧾"),
+        bot("You got it, let's get that return rolling! 🧾 Here's our return policy:"),
         bot(RETURN_POLICY.rules.map((r) => `• ${r}`).join('\n')),
         bot(
-          `When you're ready, start your return here: ${STORE.returnsUrl}\n\nExchanges work the same way. Just pick "exchange" on that page and we'll get the right size or color headed your way.`,
+          `Starting one is easy:\n1. Head to ${STORE.returnsUrl}\n2. Pick "return" and select the order it's from\n3. Pack the item in its original packaging and send it off\n\nOnce it lands back at base camp, we'll process your refund.`,
         ),
-        bot(ANYTHING_ELSE),
+        bot(`Changed your mind and want a different size or color instead? Just say "exchange" and I'll walk you through that instead. ${ANYTHING_ELSE}`),
       ],
       chips: MENU_CHIPS,
     };
@@ -287,12 +327,12 @@ export class Conversation {
     this.resetToMenu();
     return {
       messages: [
-        bot('Absolutely, exchanges are easy! 🔁 They follow the same policy as returns:'),
+        bot("Absolutely, exchanges are easy! 🔁 They follow the same 30-day policy as returns:"),
         bot(RETURN_POLICY.rules.map((r) => `• ${r}`).join('\n')),
         bot(
-          `Start your exchange here: ${STORE.returnsUrl}\n\nPick "exchange" on that page, choose the size or color you'd like instead, and we'll get the right one headed your way.`,
+          `Here's the trail map:\n1. Head to ${STORE.returnsUrl}\n2. Pick "exchange" and select the order it's from\n3. Choose the size or color you'd like instead\n\nAs soon as your original is on its way back, we'll get the replacement headed your way.`,
         ),
-        bot(ANYTHING_ELSE),
+        bot(`Rather have a refund instead? Just say "return" and I'll set you on that path. ${ANYTHING_ELSE}`),
       ],
       chips: MENU_CHIPS,
     };

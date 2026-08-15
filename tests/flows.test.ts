@@ -89,18 +89,70 @@ describe('order tracking flow (use case i)', () => {
 });
 
 describe('returns & exchanges flow (use case ii)', () => {
-  it('explains the full policy and provides the returns link', () => {
+  it('explains the full return policy and provides the returns link', () => {
     const r = convo.handle('what is your return policy?');
     const text = allText(r);
     expect(text).toMatch(/30[- ]day/);
     expect(text).toContain('unused');
     expect(text).toContain('original packaging');
     expect(text).toMatch(/https?:\/\//);
+    expect(text).toContain('refund');
   });
 
   it('returns the user to the main flow afterward', () => {
     const r = convo.handle('I want to return my boots');
     expect(r.chips.length).toBeGreaterThan(0);
+  });
+
+  it('combined chip asks whether the user wants a return or an exchange', () => {
+    const r = convo.handle('↩️ Returns & exchanges');
+    const text = allText(r);
+    expect(text).toMatch(/\?/);
+    expect(text).toContain('return');
+    expect(text).toContain('exchange');
+    expect(text).not.toMatch(/https?:\/\//); // no policy dump yet
+    const chips = r.chips.join(' ').toLowerCase();
+    expect(chips).toContain('start a return');
+    expect(chips).toContain('make an exchange');
+  });
+
+  it('choice question → "a return please" → full return policy', () => {
+    convo.handle('↩️ Returns & exchanges');
+    const text = allText(convo.handle('a return please'));
+    expect(text).toMatch(/30[- ]day/);
+    expect(text).toContain('refund');
+  });
+
+  it('choice question → "exchange" → full exchange policy', () => {
+    convo.handle('↩️ Returns & exchanges');
+    const text = allText(convo.handle('exchange'));
+    expect(text).toContain('exchange');
+    expect(text).toMatch(/30[- ]day/);
+    expect(text).toMatch(/size or color/);
+  });
+
+  it('ambiguous free text ("return or exchange") also asks which one', () => {
+    const r = convo.handle('I want to return or exchange my boots');
+    const text = allText(r);
+    expect(text).toMatch(/\?/);
+    expect(text).not.toMatch(/https?:\/\//); // clarifies before any policy dump
+    expect(r.chips.join(' ').toLowerCase()).toContain('make an exchange');
+  });
+
+  it('choice question re-asks on gibberish, then still resolves', () => {
+    convo.handle('↩️ Returns & exchanges');
+    const again = allText(convo.handle('hmm not sure blorp'));
+    expect(again).not.toMatch(/didn.t (quite )?catch/); // contextual re-ask, not generic fallback
+    expect(again).toMatch(/return/);
+    expect(again).toMatch(/exchange/);
+    const text = allText(convo.handle('swap it'));
+    expect(text).toMatch(/size or color/);
+  });
+
+  it('choice question lets other intents escape (e.g. tracking)', () => {
+    convo.handle('↩️ Returns & exchanges');
+    const r = convo.handle('actually, where is my order?');
+    expect(allText(r)).toContain('order number');
   });
 });
 

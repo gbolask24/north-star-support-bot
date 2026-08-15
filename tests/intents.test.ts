@@ -36,6 +36,8 @@ describe('intent recognition — phrasing variations (requirement 3.a)', () => {
     'I need to swap this for a different size',
     'Can I swap this for another color?',
     'This is the wrong size, can I get a different one?',
+    'my jacket is too small',
+    'these boots are too big for me',
   ])('exchanges: "%s"', (text) => {
     expect(detectIntent(text)).toBe('exchange');
   });

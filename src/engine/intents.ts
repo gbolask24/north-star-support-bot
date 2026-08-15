@@ -46,6 +46,7 @@ const PATTERNS: Record<Exclude<Intent, 'unknown'>, Pattern[]> = {
     p(/\bswap\b/, 3),
     p(/\b(different|bigger|smaller|larger|another|wrong) (size|colou?r|fit)\b/, 3),
     p(/\bsize (up|down)\b/, 3),
+    p(/\btoo (small|big|large|tight|loose|long|short)\b/, 3),
     p(/\btrade (it |this )?in\b/, 3),
   ],
   recommend: [
@@ -92,7 +93,7 @@ const PATTERNS: Record<Exclude<Intent, 'unknown'>, Pattern[]> = {
 };
 
 // Minimum score to claim an intent, a single weak keyword is not enough.
-const THRESHOLD = 2;
+export const THRESHOLD = 2;
 
 export function normalize(text: string): string {
   return text
@@ -103,12 +104,10 @@ export function normalize(text: string): string {
     .trim();
 }
 
-export function detectIntent(text: string): Intent {
+export function intentScores(text: string): Partial<Record<Intent, number>> {
   const t = normalize(text);
-  if (!t) return 'unknown';
-
-  let best: Intent = 'unknown';
-  let bestScore = 0;
+  if (!t) return {};
+  const scores: Partial<Record<Intent, number>> = {};
   for (const [intent, patterns] of Object.entries(PATTERNS) as [
     Exclude<Intent, 'unknown'>,
     Pattern[],
@@ -117,6 +116,16 @@ export function detectIntent(text: string): Intent {
     for (const { re, weight } of patterns) {
       if (re.test(t)) score += weight;
     }
+    if (score > 0) scores[intent] = score;
+  }
+  return scores;
+}
+
+export function detectIntent(text: string): Intent {
+  const scores = intentScores(text);
+  let best: Intent = 'unknown';
+  let bestScore = 0;
+  for (const [intent, score] of Object.entries(scores) as [Intent, number][]) {
     if (score > bestScore) {
       bestScore = score;
       best = intent;
