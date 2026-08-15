@@ -123,6 +123,8 @@ export class Conversation {
         return this.trackStart(input);
       case 'returns':
         return this.returnsInfo();
+      case 'exchange':
+        return this.exchangeInfo();
       case 'shipping':
         return this.shippingInfo();
       case 'recommend':
@@ -274,6 +276,21 @@ export class Conversation {
         bot(RETURN_POLICY.rules.map((r) => `• ${r}`).join('\n')),
         bot(
           `When you're ready, start your return here: ${STORE.returnsUrl}\n\nExchanges work the same way. Just pick "exchange" on that page and we'll get the right size or color headed your way.`,
+        ),
+        bot(ANYTHING_ELSE),
+      ],
+      chips: MENU_CHIPS,
+    };
+  }
+
+  private exchangeInfo(): BotResponse {
+    this.resetToMenu();
+    return {
+      messages: [
+        bot('Absolutely, exchanges are easy! 🔁 They follow the same policy as returns:'),
+        bot(RETURN_POLICY.rules.map((r) => `• ${r}`).join('\n')),
+        bot(
+          `Start your exchange here: ${STORE.returnsUrl}\n\nPick "exchange" on that page, choose the size or color you'd like instead, and we'll get the right one headed your way.`,
         ),
         bot(ANYTHING_ELSE),
       ],

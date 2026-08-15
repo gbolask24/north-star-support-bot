@@ -4,6 +4,7 @@
 export type Intent =
   | 'track_order'
   | 'returns'
+  | 'exchange'
   | 'recommend'
   | 'shipping'
   | 'human'
@@ -33,10 +34,19 @@ const PATTERNS: Record<Exclude<Intent, 'unknown'>, Pattern[]> = {
   returns: [
     p(/\breturns?\b/, 3),
     p(/\brefunds?\b/, 3),
-    p(/\bexchanges?\b/, 3),
     p(/\bsend (it|this|them) back\b/, 4),
     p(/\bmoney back\b/, 3),
     p(/\btake (it|this) back\b/, 3),
+  ],
+  // Defined after `returns` so the combined "Returns & exchanges" chip
+  // resolves to the combined returns response on a tie.
+  exchange: [
+    p(/\bexchanges?\b/, 3),
+    p(/\bexchange policy\b/, 4),
+    p(/\bswap\b/, 3),
+    p(/\b(different|bigger|smaller|larger|another|wrong) (size|colou?r|fit)\b/, 3),
+    p(/\bsize (up|down)\b/, 3),
+    p(/\btrade (it |this )?in\b/, 3),
   ],
   recommend: [
     p(/\brecommend(ation)?s?\b/, 3),

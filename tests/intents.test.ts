@@ -23,11 +23,25 @@ describe('intent recognition — phrasing variations (requirement 3.a)', () => {
     'I want to return my boots',
     "What's your return policy?",
     'refund please',
-    'Can I exchange this jacket for a bigger size?',
     'How do I send this back?',
     'I want to return my order',
-  ])('returns & exchanges: "%s"', (text) => {
+  ])('returns: "%s"', (text) => {
     expect(detectIntent(text)).toBe('returns');
+  });
+
+  it.each([
+    'Can I exchange this jacket for a bigger size?',
+    "What's your exchange policy?",
+    'How do exchanges work?',
+    'I need to swap this for a different size',
+    'Can I swap this for another color?',
+    'This is the wrong size, can I get a different one?',
+  ])('exchanges: "%s"', (text) => {
+    expect(detectIntent(text)).toBe('exchange');
+  });
+
+  it('routes the combined "Returns & exchanges" chip to returns (which covers both)', () => {
+    expect(detectIntent('↩️ Returns & exchanges')).toBe('returns');
   });
 
   it.each([

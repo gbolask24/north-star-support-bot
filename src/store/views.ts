@@ -158,6 +158,11 @@ const FAQS: { q: string; a: string; ask: string }[] = [
     ask: 'What is your return policy?',
   },
   {
+    q: 'How do exchanges work?',
+    a: 'Exchanges follow the same policy as returns: 30 days, unused items, original packaging. Start on the returns page, pick "exchange", and choose the size or color you want instead.',
+    ask: 'What is your exchange policy?',
+  },
+  {
     q: 'How fast is shipping?',
     a: 'Standard shipping takes 3-5 business days. Expedited shipping takes 1-2 business days.',
     ask: 'How long does shipping take?',

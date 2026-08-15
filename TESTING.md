@@ -27,6 +27,9 @@ click the ⭐ chat bubble (bottom-right).
 - [ ] Response includes: **30-day returns**, **unused items**, **original packaging**,
       and a **returns link**
 - [ ] Bot returns to main menu options afterward
+- [ ] Ask **"what's your exchange policy?"** (or *"can I swap this for a bigger size?"*):
+      dedicated exchange answer with the same 30-day / unused / original packaging rules
+      and the link, with "pick exchange" instructions
 
 ## 4. Product recommendations (use case iii)
 
@@ -71,6 +74,6 @@ click the ⭐ chat bubble (bottom-right).
 ## 9. Automated suite
 
 ```bash
-npm test        # 93 tests, all engine logic
+npm test        # 102 tests, all engine logic
 npm run build   # strict type-check + production build
 ```

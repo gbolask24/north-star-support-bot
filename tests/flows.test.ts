@@ -104,6 +104,29 @@ describe('returns & exchanges flow (use case ii)', () => {
   });
 });
 
+describe('exchange policy (revision request)', () => {
+  it('answers exchange-specific queries with the full exchange policy and link', () => {
+    const r = convo.handle('what is your exchange policy?');
+    const text = allText(r);
+    expect(text).toContain('exchange');
+    expect(text).toMatch(/30[- ]day/);
+    expect(text).toContain('unused');
+    expect(text).toContain('original packaging');
+    expect(text).toMatch(/https?:\/\//);
+  });
+
+  it('handles conversational exchange requests', () => {
+    const r = convo.handle('can I swap this jacket for a bigger size?');
+    expect(allText(r)).toContain('exchange');
+    expect(r.chips.length).toBeGreaterThan(0); // returns to main flow
+  });
+
+  it('mentions exchanges in the combined returns response too', () => {
+    const r = convo.handle('what is your return policy?');
+    expect(allText(r)).toContain('exchange');
+  });
+});
+
 describe('shipping info (requirement 3.d.ii)', () => {
   it('gives standard and expedited timelines', () => {
     const text = allText(convo.handle('how long does shipping take?'));

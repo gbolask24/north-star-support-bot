@@ -6,7 +6,7 @@ interactive demo storefront (shop, product pages, cart, FAQ) and ships as a full
 reviewable, zero-setup deliverable: **no API keys, no accounts, no subscriptions, no
 install steps required to test it.**
 
-![Tests](https://img.shields.io/badge/tests-93%20passing-brightgreen) ![Dependencies](https://img.shields.io/badge/runtime%20deps-0-blue)
+![Tests](https://img.shields.io/badge/tests-102%20passing-brightgreen) ![Dependencies](https://img.shields.io/badge/runtime%20deps-0-blue)
 
 ---
 
@@ -31,6 +31,7 @@ every evaluator gets identical behavior.
 | Order #333: Delivered + follow-up question | Type `333`. The bot asks if everything's okay. |
 | Any other number: invalid | Type `999` for a polite retry with options |
 | **Returns & exchanges** (policy + link) | "↩️ Returns & exchanges" shows 30-day / unused / original packaging + returns link |
+| **Exchange policy** (dedicated intent) | Ask *"what's your exchange policy?"* or *"can I swap this for a bigger size?"* for the exchange-specific answer |
 | **Product recommendations** (1-2 clarifying Qs, then category) | "🧭 Gear recommendations", pick an activity, pick a style |
 | **Human handoff** (explicit or fallback escalation) | "💬 Talk to a live agent". The header switches to **Riley · Live Agent** (navy). Keep chatting or return to the main menu. |
 | **Intent recognition** (phrasing variations) | Try *"track my package"*, *"wheres my stuff"*, *"refund please"*, *"talk to a human"*. Free text works everywhere. |
@@ -75,7 +76,7 @@ src/
 ├── style.css          # Design system (self-hosted fonts, reduced-motion support)
 └── main.ts            # Entry point
 
-tests/                 # 93 Vitest tests: intent variations, exact mock-order logic,
+tests/                 # 102 Vitest tests: intent variations, exact mock-order logic,
                        # flow transitions, fallback strikes, handoff + return, cart math
 ```
 
@@ -92,7 +93,7 @@ service later would touch only `intents.ts`.
 npm test
 ```
 
-93 tests cover: 5+ phrasing variations per core intent, the four order cases exactly as
+102 tests cover: 5+ phrasing variations per core intent, the four order cases exactly as
 specified, policy and shipping wording, both recommendation questions, fallback strike
 logic and reset, the full handoff and return-to-menu loop, and cart math. See
 `TESTING.md` for the manual walkthrough matching the submission checklist.
